@@ -27,7 +27,6 @@ export default function Home() {
   const completeTask = useMutation(api.tasks.complete)
   const undoTask = useMutation(api.tasks.undoComplete)
   const deleteTask = useMutation(api.tasks.deleteTask)
-  const replaceWithSubtasks = useMutation(api.tasks.replaceWithSubtasks)
 
   const handleAddTodo = async (text: string) => {
     const trimmed = text.trim()
