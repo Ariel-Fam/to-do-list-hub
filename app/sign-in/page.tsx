@@ -2,7 +2,6 @@
 
 import type { FormEvent } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   CheckCircle2,
   ListChecks,
@@ -18,9 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import todoImage from "@/public/todo.png";
 import { SignInButton, SignUpButton} from '@clerk/nextjs'
 
