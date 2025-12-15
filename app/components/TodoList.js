@@ -3,7 +3,7 @@
 
 import { CheckCircle, Trash2 } from 'lucide-react';
 
-export default function TodoList({ todos, onToggleComplete, onDelete, loadingAiTaskId, isAiLoading }) {
+export default function TodoList({ todos, onToggleComplete, onDelete, onBreakDown, loadingAiTaskId, isAiLoading }) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-slate-300 border-b-2 border-slate-700 pb-2">

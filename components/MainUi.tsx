@@ -9,9 +9,10 @@ import TodoInput from '@/app/components/TodoInput'
 import TodoList from '@/app/components/TodoList'
 import CompletedTodoList from '@/app/components/CompletedTodoList'
 import { api } from '@/convex/_generated/api'
+import { Id } from '@/convex/_generated/dataModel'
 
 type Task = {
-  _id: string
+  _id: Id<'tasks'>
   text: string
   completedAt?: number
 }

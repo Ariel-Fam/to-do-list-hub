@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 
-export default function TodoInput({ onAddTodo }) {
+export default function TodoInput({ onAddTodo, onAddMultipleTodos, isAiLoading, setIsAiLoading, callGemini }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (e) => {
