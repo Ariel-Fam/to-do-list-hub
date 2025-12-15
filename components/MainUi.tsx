@@ -19,8 +19,6 @@ type Task = {
 
 export default function Home() {
   const [isCompletedSidebarOpen, setIsCompletedSidebarOpen] = useState(false)
-  const [isAiLoading, setIsAiLoading] = useState(false)
-  const [loadingAiTaskId, setLoadingAiTaskId] = useState<string | null>(null)
 
   const activeTodos = (useQuery(api.tasks.listActive, {}) as Task[] | undefined) || []
   const completedTodos = (useQuery(api.tasks.listCompleted, {}) as Task[] | undefined) || []
@@ -31,37 +29,10 @@ export default function Home() {
   const deleteTask = useMutation(api.tasks.deleteTask)
   const replaceWithSubtasks = useMutation(api.tasks.replaceWithSubtasks)
 
-  const callGemini = async (prompt: string) => {
-    const chatHistory = [{ role: 'user', parts: [{ text: prompt }] }]
-    const payload = { contents: chatHistory }
-    const apiKey = '' // Leave empty
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      if (!response.ok) throw new Error(`API call failed with status: ${response.status}`)
-      const result = await response.json()
-      return result.candidates?.[0]?.content?.parts?.[0]?.text || null
-    } catch (error) {
-      console.error('Gemini API call error:', error)
-      return null
-    }
-  }
-
   const handleAddTodo = async (text: string) => {
     const trimmed = text.trim()
     if (!trimmed) return
     await addTask({ text: trimmed })
-  }
-
-  const handleAddMultipleTodos = async (tasks: string[]) => {
-    const cleaned = tasks.map((task) => task.trim()).filter(Boolean)
-    if (cleaned.length === 0) return
-    await Promise.all(cleaned.map((taskText) => addTask({ text: taskText })))
   }
 
   const handleToggleComplete = async (todo: Task) => {
@@ -74,27 +45,6 @@ export default function Home() {
 
   const handleDeleteTodo = async (todoToDelete: Task) => {
     await deleteTask({ taskId: todoToDelete._id })
-  }
-
-  const handleBreakDownTask = async (taskToBreak: Task) => {
-    setLoadingAiTaskId(taskToBreak._id)
-    const prompt = `Break down the following task into smaller, actionable sub-tasks: "${taskToBreak.text}". List them clearly. Do not include the original task in the list. For example, for "Plan a vacation", respond with:\n- Research destinations\n- Book flights\n- Reserve accommodation`
-    const subtasksText = await callGemini(prompt)
-
-    if (subtasksText) {
-      const subTasks = subtasksText
-        .split('\n')
-        .map((l: string) => l.replace(/^- /, '').trim())
-        .filter(Boolean)
-
-      if (subTasks.length > 0) {
-        await replaceWithSubtasks({
-          taskId: taskToBreak._id,
-          subtasks: subTasks.map((taskText: string) => `- ${taskText}`),
-        })
-      }
-    }
-    setLoadingAiTaskId(null)
   }
 
   return (
@@ -120,19 +70,14 @@ export default function Home() {
           <main className="lg:col-span-2">
             <TodoInput
               onAddTodo={handleAddTodo}
-              onAddMultipleTodos={handleAddMultipleTodos}
-              isAiLoading={isAiLoading}
-              setIsAiLoading={setIsAiLoading}
-              callGemini={callGemini}
             />
 
             <TodoList
               todos={activeTodos}
               onToggleComplete={handleToggleComplete}
               onDelete={handleDeleteTodo}
-              onBreakDown={handleBreakDownTask}
-              loadingAiTaskId={loadingAiTaskId}
-              isAiLoading={isAiLoading}
+              loadingAiTaskId={null}
+              isAiLoading={false}
             />
           </main>
 
