@@ -10,39 +10,43 @@ const requireUserId = async (ctx: { auth: any }) => {
 }
 
 export const listActive = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { category: v.optional(v.string()) },
+  handler: async (ctx, { category }) => {
     const userId = await requireUserId(ctx)
-    const tasks = await ctx.db
-      .query('tasks')
-      .withIndex('by_user_status', (q) => q.eq('userId', userId).eq('status', 'active'))
-      .order('desc')
-      .collect()
-    return tasks
+    const baseQuery = category
+      ? ctx.db
+          .query('tasks')
+          .withIndex('by_user_category_status', (q) => q.eq('userId', userId).eq('category', category).eq('status', 'active'))
+      : ctx.db.query('tasks').withIndex('by_user_status', (q) => q.eq('userId', userId).eq('status', 'active'))
+    return await baseQuery.order('desc').collect()
   },
 })
 
 export const listCompleted = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { category: v.optional(v.string()) },
+  handler: async (ctx, { category }) => {
     const userId = await requireUserId(ctx)
-    const tasks = await ctx.db
-      .query('tasks')
-      .withIndex('by_user_status', (q) => q.eq('userId', userId).eq('status', 'completed'))
-      .collect()
+    const baseQuery = category
+      ? ctx.db
+          .query('tasks')
+          .withIndex('by_user_category_status', (q) => q.eq('userId', userId).eq('category', category).eq('status', 'completed'))
+      : ctx.db.query('tasks').withIndex('by_user_status', (q) => q.eq('userId', userId).eq('status', 'completed'))
+
+    const tasks = await baseQuery.collect()
     return tasks.sort((a, b) => (b.completedAt ?? 0) - (a.completedAt ?? 0))
   },
 })
 
 export const add = mutation({
-  args: { text: v.string() },
-  handler: async (ctx, { text }) => {
+  args: { text: v.string(), category: v.optional(v.string()) },
+  handler: async (ctx, { text, category }) => {
     const userId = await requireUserId(ctx)
     return await ctx.db.insert('tasks', {
       userId,
       text,
       status: 'active',
       createdAt: Date.now(),
+      category,
     })
   },
 })
@@ -92,14 +96,13 @@ export const deleteTask = mutation({
       throw new Error('Unauthorized')
     }
 
-    if (task.status === 'completed') {
-      await ctx.db.insert('history', {
-        userId,
-        text: task.text,
-        completedAt: task.completedAt ?? task._creationTime,
-        deletedAt: Date.now(),
-      })
-    }
+    await ctx.db.insert('history', {
+      userId,
+      text: task.text,
+      completedAt: task.completedAt,
+      deletedAt: Date.now(),
+      category: task.category,
+    })
 
     await ctx.db.delete(taskId)
     return taskId
@@ -125,6 +128,7 @@ export const replaceWithSubtasks = mutation({
         text,
         status: 'active',
         createdAt: Date.now(),
+        category: task.category,
       }),
     )
     await Promise.all(inserts)

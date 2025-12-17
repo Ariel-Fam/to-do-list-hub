@@ -35,6 +35,7 @@ export default function Home() {
   }
 
   const handleToggleComplete = async (todo: Task) => {
+    setIsCompletedSidebarOpen(true)
     await completeTask({ taskId: todo._id })
   }
 
@@ -55,13 +56,21 @@ export default function Home() {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-1">Todo List</h1>
               <p className="text-lg text-slate-400">Your productivty assistant.</p>
             </div>
-            <Link
-              href="/history"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-100 shadow-md transition hover:border-indigo-400 hover:text-white"
-            >
-              <History size={16} />
-              Task history
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/categories"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-100 shadow-md transition hover:border-indigo-400 hover:text-white"
+              >
+                Category view
+              </Link>
+              <Link
+                href="/history"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-100 shadow-md transition hover:border-indigo-400 hover:text-white"
+              >
+                <History size={16} />
+                Task history
+              </Link>
+            </div>
           </div>
         </header>
 

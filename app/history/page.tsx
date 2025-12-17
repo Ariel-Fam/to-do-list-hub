@@ -60,6 +60,11 @@ export default function HistoryPage() {
                 className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm shadow-indigo-500/10"
               >
                 <p className="text-slate-100">{entry.text}</p>
+                <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                  <span className="rounded-full bg-slate-800 px-3 py-1 text-slate-200 border border-slate-700">
+                    {entry.category ? `${entry.category.charAt(0).toUpperCase()}${entry.category.slice(1)} category` : 'Uncategorized'}
+                  </span>
+                </div>
                 <div className="mt-2 flex flex-wrap gap-3 text-xs text-slate-400">
                   <span>
                     Completed:{' '}

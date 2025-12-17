@@ -48,7 +48,7 @@ export default function TodoList({ todos, onToggleComplete, onDelete, loadingAiT
         </ul>
       ) : (
         <div className="text-center py-10 px-4 bg-slate-800 rounded-lg">
-          <p className="text-slate-400">All tasks are completed, or you can ask Gemini to suggest some!</p>
+          <p className="text-slate-400">All tasks are completed.</p>
         </div>
       )}
     </div>
