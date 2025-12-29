@@ -26,17 +26,6 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-sm text-black">
-          <Link className="p-4 bg-white rounded-2xl hover:text-blue-500"  href="/">Home</Link>
-          <Link className="p-4 bg-white rounded-2xl hover:text-blue-500" href="/sign-in">Sign in</Link>
-          <a
-            className="hover:text-blue-500 p-4 bg-white rounded-2xl "
-            href="mailto:arliebeats@gmail.com"
-          >
-            Support
-          </a>
-        </div>
-
         <p className="text-xs text-black">
           Built with Next.js 15, Tailwind, and shadcn/ui.
         </p>
