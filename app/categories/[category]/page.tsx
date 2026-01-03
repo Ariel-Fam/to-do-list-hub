@@ -29,6 +29,7 @@ const LABELS: Record<string, string> = {
   creative: 'Creative Tasks',
   gratitude: 'Gratitude Tasks',
   research: 'Research Tasks',
+  fitness: 'Fitness Tasks',
 }
 
 export default function CategoryViewPage() {

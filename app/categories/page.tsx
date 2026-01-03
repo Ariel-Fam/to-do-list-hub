@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { BookOpen, Zap, Shuffle, Sparkles, ArrowLeft, Clock3, Users, Palette, Heart, Microscope } from 'lucide-react'
+import { BookOpen, Zap, Shuffle, Sparkles, ArrowLeft, Clock3, Users, Palette, Heart, Microscope, Dumbbell } from 'lucide-react'
 
 const categories = [
   { slug: 'study', label: 'Study Tasks', icon: BookOpen, color: 'text-amber-300', bg: 'from-amber-500/10 to-amber-500/5' },
@@ -12,6 +12,7 @@ const categories = [
   { slug: 'creative', label: 'Creative Tasks', icon: Palette, color: 'text-pink-300', bg: 'from-pink-500/10 to-pink-500/5' },
   { slug: 'gratitude', label: 'Gratitude Tasks', icon: Heart, color: 'text-rose-300', bg: 'from-rose-500/10 to-rose-500/5' },
   { slug: 'research', label: 'Research Tasks', icon: Microscope, color: 'text-lime-300', bg: 'from-lime-500/10 to-lime-500/5' },
+  { slug: 'fitness', label: 'Fitness Tasks', icon: Dumbbell, color: 'text-orange-300', bg: 'from-orange-500/10 to-orange-500/5' },
 ]
 
 export default function CategoriesPage() {
