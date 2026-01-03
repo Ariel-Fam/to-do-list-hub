@@ -15,6 +15,7 @@ type Task = {
   _id: Id<'tasks'>
   text: string
   completedAt?: number
+  tracking?: boolean
 }
 
 export default function Home() {
@@ -27,6 +28,7 @@ export default function Home() {
   const completeTask = useMutation(api.tasks.complete)
   const undoTask = useMutation(api.tasks.undoComplete)
   const deleteTask = useMutation(api.tasks.deleteTask)
+  const toggleTrack = useMutation(api.tasks.toggleTracking)
 
   const handleAddTodo = async (text: string) => {
     const trimmed = text.trim()
@@ -45,6 +47,10 @@ export default function Home() {
 
   const handleDeleteTodo = async (todoToDelete: Task) => {
     await deleteTask({ taskId: todoToDelete._id })
+  }
+
+  const handleToggleTrack = async (todo: Task) => {
+    await toggleTrack({ taskId: todo._id })
   }
 
   return (
@@ -84,6 +90,7 @@ export default function Home() {
               todos={activeTodos}
               onToggleComplete={handleToggleComplete}
               onDelete={handleDeleteTodo}
+              onToggleTrack={handleToggleTrack}
               loadingAiTaskId={null}
               isAiLoading={false}
             />

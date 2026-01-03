@@ -47,6 +47,7 @@ export const add = mutation({
       status: 'active',
       createdAt: Date.now(),
       category,
+      tracking: false,
     })
   },
 })
@@ -102,6 +103,7 @@ export const deleteTask = mutation({
       completedAt: task.completedAt,
       deletedAt: Date.now(),
       category: task.category,
+      tracking: task.tracking,
     })
 
     await ctx.db.delete(taskId)
@@ -129,10 +131,24 @@ export const replaceWithSubtasks = mutation({
         status: 'active',
         createdAt: Date.now(),
         category: task.category,
+        tracking: false,
       }),
     )
     await Promise.all(inserts)
     return true
+  },
+})
+
+export const toggleTracking = mutation({
+  args: { taskId: v.id('tasks') },
+  handler: async (ctx, { taskId }) => {
+    const userId = await requireUserId(ctx)
+    const task = await ctx.db.get(taskId)
+    if (!task) throw new Error('Task not found')
+    if (task.userId !== userId) throw new Error('Unauthorized')
+    const next = !task.tracking
+    await ctx.db.patch(taskId, { tracking: next })
+    return next
   },
 })
 

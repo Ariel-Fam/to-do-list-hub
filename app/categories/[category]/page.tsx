@@ -17,6 +17,7 @@ type Task = {
   text: string
   completedAt?: number
   category?: string
+  tracking?: boolean
 }
 
 const LABELS: Record<string, string> = {
@@ -44,6 +45,7 @@ export default function CategoryViewPage() {
   const completeTask = useMutation(api.tasks.complete)
   const undoTask = useMutation(api.tasks.undoComplete)
   const deleteTask = useMutation(api.tasks.deleteTask)
+  const toggleTrack = useMutation(api.tasks.toggleTracking)
 
   const handleAddTodo = async (text: string) => {
     const trimmed = text.trim()
@@ -62,6 +64,10 @@ export default function CategoryViewPage() {
 
   const handleDeleteTodo = async (todoToDelete: Task) => {
     await deleteTask({ taskId: todoToDelete._id })
+  }
+
+  const handleToggleTrack = async (todo: Task) => {
+    await toggleTrack({ taskId: todo._id })
   }
 
   return (
@@ -106,6 +112,7 @@ export default function CategoryViewPage() {
               todos={activeTodos}
               onToggleComplete={handleToggleComplete}
               onDelete={handleDeleteTodo}
+              onToggleTrack={handleToggleTrack}
               loadingAiTaskId={null}
               isAiLoading={false}
             />

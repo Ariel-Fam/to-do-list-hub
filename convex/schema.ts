@@ -9,6 +9,7 @@ export default defineSchema({
     createdAt: v.number(),
     completedAt: v.optional(v.number()),
     category: v.optional(v.string()),
+    tracking: v.optional(v.boolean()),
   })
     .index('by_user', ['userId'])
     .index('by_user_status', ['userId', 'status'])
@@ -20,6 +21,7 @@ export default defineSchema({
     completedAt: v.optional(v.number()),
     deletedAt: v.number(),
     category: v.optional(v.string()),
+    tracking: v.optional(v.boolean()),
   }).index('by_user', ['userId']),
 })
 

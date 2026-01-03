@@ -3,7 +3,7 @@
 
 import { CheckCircle, Trash2 } from 'lucide-react';
 
-export default function TodoList({ todos, onToggleComplete, onDelete, loadingAiTaskId, isAiLoading }) {
+export default function TodoList({ todos, onToggleComplete, onDelete, onToggleTrack, loadingAiTaskId, isAiLoading }) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-slate-300 border-b-2 border-slate-700 pb-2">
@@ -26,6 +26,17 @@ export default function TodoList({ todos, onToggleComplete, onDelete, loadingAiT
                 ) : (
                   <>
 
+                    <button
+                      onClick={() => onToggleTrack(todo)}
+                      title={todo.tracking ? 'Stop tracking' : 'Track task'}
+                      className={`border px-3 py-1 rounded-full text-sm transition-colors ${
+                        todo.tracking
+                          ? 'border-indigo-400 text-indigo-200 bg-indigo-500/10'
+                          : 'border-slate-600 text-slate-200 hover:border-indigo-300 hover:text-white'
+                      }`}
+                    >
+                      {todo.tracking ? 'Tracking' : 'Track'}
+                    </button>
                     <button
                       onClick={() => onToggleComplete(todo)}
                       title="Mark as complete"
